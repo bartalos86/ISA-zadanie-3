@@ -1,0 +1,57 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: isa-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: isa_db
+      POSTGRES_USER: isa_user
+      POSTGRES_PASSWORD: isa_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U isa_user -d isa_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: isa-backend
+    restart: unless-stopped
+    environment:
+      FLASK_APP: app.py
+      FLASK_RUN_HOST: 0.0.0.0
+      FLASK_RUN_PORT: 5001
+      DATABASE_URL: postgresql://isa_user:isa_password@db:5432/isa_db
+      RECOMMENDER_MODEL_DIR: /app/model
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./backend/model:/app/model:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    image: node:22-alpine
+    container_name: isa-frontend-placeholder
+    restart: unless-stopped
+    working_dir: /app
+    command: >
+      sh -c "echo 'React frontend placeholder container is running.' &&
+             echo 'Put your React app in ./frontend and start it here later.' &&
+             sleep infinity"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

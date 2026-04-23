@@ -1,0 +1,8 @@
+Flask
+flask-cors
+torch
+orjson
+pandas
+psycopg2-binary
+SQLAlchemy
+tqdm
