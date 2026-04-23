@@ -88,7 +88,19 @@ export interface BookReviewsResponse {
   limit: number;
 }
 
-const BASE = "/api";
+function getApiBase(): string {
+  // Server-side requests in Docker should use the internal Compose service DNS.
+  if (typeof window === "undefined") {
+    return process.env.INTERNAL_API_BASE_URL ?? "http://backend:5001/api";
+  }
+
+  // Browser requests from host should call the published backend port.
+  return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://localhost:5001/api"
+    : "/api";
+}
+
+const BASE = getApiBase();
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, init);

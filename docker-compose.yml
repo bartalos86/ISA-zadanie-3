@@ -38,18 +38,15 @@ services:
         condition: service_healthy
 
   frontend:
-    image: node:22-alpine
-    container_name: isa-frontend-placeholder
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: isa-frontend
     restart: unless-stopped
-    working_dir: /app
-    command: >
-      sh -c "echo 'React frontend placeholder container is running.' &&
-             echo 'Put your React app in ./frontend and start it here later.' &&
-             sleep infinity"
+    environment:
+      INTERNAL_API_BASE_URL: http://backend:5001/api
     ports:
       - "3000:3000"
-    volumes:
-      - ./frontend:/app
     depends_on:
       - backend
 
