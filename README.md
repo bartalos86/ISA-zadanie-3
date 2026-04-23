@@ -116,8 +116,3 @@ source .venv/bin/activate
 pip install -r requirements.txt
 flask --app app.py run --host=0.0.0.0 --port=5001
 ```
-
-## Notes
-
-- The Compose `frontend` service is currently a placeholder container.
-- Keep model checkpoint files in `backend/model/` for containerized backend inference.
