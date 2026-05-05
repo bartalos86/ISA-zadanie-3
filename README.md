@@ -1,11 +1,45 @@
 # ISA zadanie 3 - Book Recommendation System
 
-Full-stack project for exploring books and generating recommendations based on user history (or cold-start selection).
+## Goal
+This application was created to simulate a production bookshop, with the goal of integrating our AI model. Not all features of the page are functional, some compoanents such as footer and category bar was addded for easthetic purposes.
+
+What is working:
+1. Book recommendation by user - select a user from the dropdown or from the user bubbles, when a user is selected, their books are displayed. To see more detail and review about the books click on the cover. To get recommended similar books click on the `Get recommendations` button.
+2. Book recommendation cold start - if you want ot get books recommended for you own tasste, click on the `New user? Start onboarding` button, when no user is selected. Here you will have to choose 5 books which mathc your taste. You can load more options with `load more books` button, when ready click the `Get Recommendations` button.
+3. Book detail view - when you click on the cover of a random book, you get taken to the book detail view, here you can see additional information about the given book, along with the reviews. When the `user_id` of the reviewer is highlighted with white, you can click on the id and see the other books purchased by the given reviewer.
+4. Search - as an extra the search bar also works and all books are fully searchable.
+
+
+## AI Act considerations
+
+### System classification
+Book recommender system - not a high risk according to Annex III and it is not used in mmaking decisions in sensitive domains
+
+### Model quality
+- `Recall@10`: 0.0694850900
+- `NDCG@10`: 0.0414916329
+- Based on the real-world evaluation, the recommender produces fairly accurate recommendations even for cold start. In most cases the recommended book's category and topic matches the already bought or selected books categories.
+
+### Risk assasement
+- **Popularity bias**: more popular books are more prone to being promoted
+  - Mitigataion: This is mitigrated druing training using popularity resampling
+- **Data quality risk**: noisy data, duplicate reviews, books, books with no reviews
+  - Mitigated: Only books and users with more than 5 reviews were used for training, additionally to avoid books with the same title being diplasyed multiple times (different `asin`), FE filtering is used
+- **User harm risk**: books with inappropraite content and cover ca be recommended to users
+  - Mitigration: The books should be already filered as this is a dataset from Amazon, but the implementation of additional per user blacklisting or special filter would be recommended in a real-world use case
+- **Technical failure risk**: the ai model can be killed by a process manager due to high RAM usage
+  - Mitigration: popular books are returned from the database instead
+- **Privacy risk (GDPR)**: Sensitive user data gets leaked, such as taste in books
+  - Mitigation: no personal data is retained which can be used for identification, all users are fully anonymous
+
+### Transparency and human oversight
+- Users are informed that the recommendations are AI generated as this is the whole premise of the application. :D
 
 ## Project Structure
 
 - `backend/` - Flask API, PostgreSQL access, recommendation model loading, dataset import script.
 - `frontend/` - React Router + React + MUI client application.
+- `database/` - Database seeding
 - `docker-compose.yml` - PostgreSQL + backend containers, plus a frontend placeholder container.
 
 ## Features
@@ -33,6 +67,8 @@ Full-stack project for exploring books and generating recommendations based on u
 
 From the repository root:
 
+First, you have to create a `model` folder inside `backend` and put the exported model here.
+Then:
 ```bash
 docker compose up --build
 ```
@@ -65,7 +101,7 @@ The backend expects PostgreSQL with default connection:
 
 - `postgresql+psycopg2://isa_user:isa_password@localhost:5432/isa_db`
 
-To load data, use:
+If you want to manually load data, use (this is not necessary):
 
 ```bash
 cd backend
@@ -88,8 +124,7 @@ Useful optional flags:
 
 Backend loads a PyTorch checkpoint from:
 
-1. `RECOMMENDER_CHECKPOINT_PATH` (if set), otherwise
-2. first `.pt` / `.pth` / `.ckpt` file in `RECOMMENDER_MODEL_DIR` (default `/app/model`)
+1. `backend/model` (Accepted file types: `.pt` / `.pth` / `.ckpt`)
 
 In Docker Compose, `./backend/model` is mounted read-only to `/app/model`.
 

@@ -270,6 +270,48 @@ BOOK_KEYS = [
 ]
 
 
+def _fetch_popular_books(limit, exclude_asins=None):
+    exclude_asins = [str(asin) for asin in (exclude_asins or []) if asin]
+    fetch_limit = min(300, max(1, int(limit)))
+
+    with engine.connect() as conn:
+        if exclude_asins:
+            rows = conn.execute(
+                text(
+                    BOOK_SELECT
+                    + """
+                FROM books b
+                WHERE b.title IS NOT NULL
+                  AND TRIM(b.title) != ''
+                  AND b.average_rating IS NOT NULL
+                  AND b.rating_number IS NOT NULL
+                  AND NOT (b.asin = ANY(:exclude_asins))
+                ORDER BY b.rating_number DESC NULLS LAST, b.average_rating DESC NULLS LAST
+                LIMIT :limit
+                """
+                ),
+                {"exclude_asins": exclude_asins, "limit": fetch_limit},
+            ).fetchall()
+        else:
+            rows = conn.execute(
+                text(
+                    BOOK_SELECT
+                    + """
+                FROM books b
+                WHERE b.title IS NOT NULL
+                  AND TRIM(b.title) != ''
+                  AND b.average_rating IS NOT NULL
+                  AND b.rating_number IS NOT NULL
+                ORDER BY b.rating_number DESC NULLS LAST, b.average_rating DESC NULLS LAST
+                LIMIT :limit
+                """
+                ),
+                {"limit": fetch_limit},
+            ).fetchall()
+
+    return [_row_to_book(r, BOOK_KEYS) for r in rows]
+
+
 @app.route("/api/users/<path:user_id>/books")
 def user_books(user_id):
     with engine.connect() as conn:
@@ -315,7 +357,14 @@ def recommend(user_id):
         )
         print(f"[recommender] user_id={user_id} model_asins={model_asins}")
         if not model_asins:
-            return jsonify({"recommendations": [], "user_id": user_id})
+            fallback = _fetch_popular_books(limit=16, exclude_asins=reviewed_asins)
+            return jsonify(
+                {
+                    "recommendations": fallback,
+                    "user_id": user_id,
+                    "fallback": "popular",
+                }
+            )
 
         rows = conn.execute(
             text(
@@ -534,7 +583,14 @@ def cold_start_recommend():
         )
         print(f"[recommender] cold_start seed_asins={selected_asins} model_asins={model_asins}")
         if not model_asins:
-            return jsonify({"recommendations": [], "seed_asins": selected_asins})
+            fallback = _fetch_popular_books(limit=limit, exclude_asins=selected_asins)
+            return jsonify(
+                {
+                    "recommendations": fallback,
+                    "seed_asins": selected_asins,
+                    "fallback": "popular",
+                }
+            )
 
         rows = conn.execute(
             text(
