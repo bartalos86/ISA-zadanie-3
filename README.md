@@ -3,7 +3,7 @@
 ## Goal
 This application was created to simulate a production bookshop, with the goal of integrating our AI model. Not all features of the page are functional, some compoanents such as footer and category bar was addded for easthetic purposes.
 
-What is working:
+What is working (User manual):
 1. Book recommendation by user - select a user from the dropdown or from the user bubbles, when a user is selected, their books are displayed. To see more detail and review about the books click on the cover. To get recommended similar books click on the `Get recommendations` button.
 2. Book recommendation cold start - if you want ot get books recommended for you own tasste, click on the `New user? Start onboarding` button, when no user is selected. Here you will have to choose 5 books which mathc your taste. You can load more options with `load more books` button, when ready click the `Get Recommendations` button.
 3. Book detail view - when you click on the cover of a random book, you get taken to the book detail view, here you can see additional information about the given book, along with the reviews. When the `user_id` of the reviewer is highlighted with white, you can click on the id and see the other books purchased by the given reviewer.
@@ -13,7 +13,7 @@ What is working:
 ## AI Act considerations
 
 ### System classification
-Book recommender system - not a high risk according to Annex III and it is not used in mmaking decisions in sensitive domains
+Book recommender system - not a high risk according to Annex III and it is not used in making decisions in sensitive domains
 
 ### Model quality
 - `Recall@10`: 0.0694850900
@@ -33,7 +33,7 @@ Book recommender system - not a high risk according to Annex III and it is not u
   - Mitigation: no personal data is retained which can be used for identification, all users are fully anonymous
 
 ### Transparency and human oversight
-- Users are informed that the recommendations are AI generated as this is the whole premise of the application. :D
+- Users are informed that the recommendations are AI generated as this is the whole promise of the application. :D
 
 ## Project Structure
 
@@ -41,15 +41,6 @@ Book recommender system - not a high risk according to Annex III and it is not u
 - `frontend/` - React Router + React + MUI client application.
 - `database/` - Database seeding
 - `docker-compose.yml` - PostgreSQL + backend containers, plus a frontend placeholder container.
-
-## Features
-
-- Browse and search books.
-- Browse/search users.
-- User-personalized recommendations (`/api/recommend/<user_id>`).
-- Cold-start recommendations by selecting exactly 5 books (`/api/recommend/cold-start`).
-- Book detail page with recent reviews.
-- Dataset loader for importing Amazon Books `.jsonl.gz` data into PostgreSQL.
 
 ## Tech Stack
 
@@ -68,6 +59,7 @@ Book recommender system - not a high risk according to Annex III and it is not u
 From the repository root:
 
 First, you have to create a `model` folder inside `backend` and put the exported model here.
+
 Then:
 ```bash
 docker compose up --build
