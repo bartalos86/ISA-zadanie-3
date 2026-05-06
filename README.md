@@ -143,3 +143,18 @@ source .venv/bin/activate
 pip install -r requirements.txt
 flask --app app.py run --host=0.0.0.0 --port=5001
 ```
+
+## Deployment
+The project was deployed on a private server and a custom private-owned domain. The deployment integrates our aforementioned submission 2 AI hybrid recsys model and follows the docker compose process, as proof of applicability.
+
+The deployed project can be found on the following web:
+
+## https://booksense.omnit.sk/
+
+
+## Gallery
+<img width="1026" height="1314" alt="image" src="https://github.com/user-attachments/assets/df344099-47d7-4da1-8c28-479ae4d4f349" />
+<img width="763" height="909" alt="image" src="https://github.com/user-attachments/assets/c8d0c81c-ce2d-4746-afae-dbdb0f45cb99" />
+<img width="761" height="355" alt="image" src="https://github.com/user-attachments/assets/77b87dcd-3961-4438-aa5c-c5be6119fb8f" />
+
+
