@@ -13,7 +13,7 @@ What is working (User manual):
 ## AI Act considerations
 
 ### System classification
-Book recommender system - not a high risk according to Annex III and it is not used in making decisions in sensitive domains
+Book recommender system - not a high risk according to Annex III (EU AI Act - high-risk AI systems) and it is not used in making decisions in sensitive domains
 
 ### Model quality
 - `Recall@10`: 0.0694850900
@@ -59,6 +59,7 @@ Book recommender system - not a high risk according to Annex III and it is not u
 From the repository root:
 
 First, you have to create a `model` folder inside `backend` and put the exported model here.
+The model can be downloaded from: [Pretrained model](https://drive.google.com/file/d/1jC4SvaFWLBV4_fWf5oOpU_hkws_ON5ID/view?usp=sharing)
 
 Then:
 ```bash
@@ -93,7 +94,11 @@ The backend expects PostgreSQL with default connection:
 
 - `postgresql+psycopg2://isa_user:isa_password@localhost:5432/isa_db`
 
-If you want to manually load data, use (this is not necessary):
+The datasets can be downloaded from the following links:
+- [Dataset](https://mcauleylab.ucsd.edu/public_datasets/data/amazon_2023/raw/review_categories/Books.jsonl.gz)
+- [Metadata](https://mcauleylab.ucsd.edu/public_datasets/data/amazon_2023/raw/meta_categories/meta_Books.jsonl.gz)
+  
+If you want to manually load data, use (this is not necessary if you downloaded the repository):
 
 ```bash
 cd backend
@@ -157,4 +162,7 @@ The deployed project can be found on the following web:
 <img width="763" height="909" alt="image" src="https://github.com/user-attachments/assets/c8d0c81c-ce2d-4746-afae-dbdb0f45cb99" />
 <img width="761" height="355" alt="image" src="https://github.com/user-attachments/assets/77b87dcd-3961-4438-aa5c-c5be6119fb8f" />
 
+## Future imporvements
+Right now the project uses only the exported model, which is not ideal when new users are registered, the preference of users change and new books are added.
 
+**Solution:** This problem in a real-world solution could be solved by incorporating a pipeline which will continously evaluate the model's NDCG and re-train the model if it falls below a certain threshold.
