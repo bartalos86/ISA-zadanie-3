@@ -97,15 +97,16 @@ The backend expects PostgreSQL with default connection:
 The datasets can be downloaded from the following links:
 - [Dataset](https://mcauleylab.ucsd.edu/public_datasets/data/amazon_2023/raw/review_categories/Books.jsonl.gz)
 - [Metadata](https://mcauleylab.ucsd.edu/public_datasets/data/amazon_2023/raw/meta_categories/meta_Books.jsonl.gz)
-  
-If you want to manually load data, use (this is not necessary if you downloaded the repository):
+
+If you want to manually load data, use (this is necessary):
 
 ```bash
 cd backend
 python load_books_to_postgres.py \
   --dataset-path data/Books.jsonl.gz \
   --metadata-path data/meta_Books.jsonl.gz \
-  --database-url postgresql+psycopg2://isa_user:isa_password@localhost:5432/isa_db
+  --database-url postgresql+psycopg2://isa_user:isa_password@localhost:5432/isa_db \
+  --max-size 2000000
 ```
 
 Useful optional flags:

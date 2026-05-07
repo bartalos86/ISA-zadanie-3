@@ -1,8 +1,6 @@
 services:
   db:
-    build:
-      context: ./database
-      dockerfile: Dockerfile
+    image: postgres:latest
     container_name: isa-postgres
     restart: unless-stopped
     environment:
