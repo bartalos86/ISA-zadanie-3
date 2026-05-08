@@ -102,6 +102,8 @@ If you want to manually load data, use (this is necessary):
 
 ```bash
 cd backend
+pip install -r requirements.txt
+#When docker compose containers are already running
 python load_books_to_postgres.py \
   --dataset-path data/Books.jsonl.gz \
   --metadata-path data/meta_Books.jsonl.gz \
