@@ -98,7 +98,7 @@ The datasets can be downloaded from the following links:
 - [Dataset](https://mcauleylab.ucsd.edu/public_datasets/data/amazon_2023/raw/review_categories/Books.jsonl.gz)
 - [Metadata](https://mcauleylab.ucsd.edu/public_datasets/data/amazon_2023/raw/meta_categories/meta_Books.jsonl.gz)
 
-If you want to manually load data, use (this is necessary):
+If you want to manually load data, use (this is necessary on first run):
 
 ```bash
 cd backend
