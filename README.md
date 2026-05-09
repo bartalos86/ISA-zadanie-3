@@ -10,6 +10,14 @@ What is working (User manual):
 4. Search - as an extra the search bar also works and all books are fully searchable.
 
 
+## Deployment
+The project was deployed on a private server and a custom private-owned domain. The deployment integrates our aforementioned submission 2 AI hybrid recsys model and follows the docker compose process, as proof of applicability.
+
+The deployed project can be found on the following web:
+
+## https://booksense.omnit.sk/
+
+
 ## AI Act considerations
 
 ### System classification
@@ -152,12 +160,6 @@ pip install -r requirements.txt
 flask --app app.py run --host=0.0.0.0 --port=5001
 ```
 
-## Deployment
-The project was deployed on a private server and a custom private-owned domain. The deployment integrates our aforementioned submission 2 AI hybrid recsys model and follows the docker compose process, as proof of applicability.
-
-The deployed project can be found on the following web:
-
-## https://booksense.omnit.sk/
 
 
 ## Gallery
